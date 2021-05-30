@@ -1,0 +1,45 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/HarmonyModAssembly.csproj": {}
+  },
+  "projects": {
+    "/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/HarmonyModAssembly.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/HarmonyModAssembly.csproj",
+        "projectName": "HarmonyModAssembly",
+        "projectPath": "/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/HarmonyModAssembly.csproj",
+        "packagesPath": "/home/qkrisi/.nuget/packages/",
+        "outputPath": "/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/qkrisi/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net35"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net35": {
+            "targetAlias": "net35",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net35": {
+          "targetAlias": "net35",
+          "runtimeIdentifierGraphPath": "/usr/lib/mono/msbuild/Current/bin/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

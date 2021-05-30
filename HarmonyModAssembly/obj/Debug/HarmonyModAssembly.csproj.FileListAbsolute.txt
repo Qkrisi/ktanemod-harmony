@@ -1,0 +1,10 @@
+/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/bin/Debug/HarmonyModAssembly.dll
+/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/bin/Debug/HarmonyModAssembly.pdb
+/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/bin/Debug/Newtonsoft.Json.dll
+/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/obj/Debug/HarmonyModAssembly.csprojAssemblyReference.cache
+/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/obj/Debug/HarmonyModAssembly.AssemblyInfoInputs.cache
+/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/obj/Debug/HarmonyModAssembly.AssemblyInfo.cs
+/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/obj/Debug/HarmonyModAssembly.csproj.CoreCompileInputs.cache
+/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/obj/Debug/HarmonyModAssembly.csproj.CopyComplete
+/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/obj/Debug/HarmonyModAssembly.dll
+/home/qkrisi/Desktop/GitHub Cloned/HarmonyMod/HarmonyModAssembly/obj/Debug/HarmonyModAssembly.pdb

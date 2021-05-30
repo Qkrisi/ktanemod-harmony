@@ -220,6 +220,7 @@ public class WorkshopEditorWindow : EditorWindow
         string folder = GetContentPath();
         Debug.LogFormat("Uploading contents of {0}", folder);
         SteamUGC.SetItemContent(ugcUpdateHandle, folder);
+       
 
         var updateUGCCall = SteamUGC.SubmitItemUpdate(ugcUpdateHandle, changeNotes);
         onItemUpdateCallResultHandler.Set(updateUGCCall);

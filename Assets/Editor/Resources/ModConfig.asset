@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
+  m_Name: ModConfig
+  m_EditorClassIdentifier: 
+  id: Harmony
+  title: Harmony
+  author: Qkrisi
+  description: 'Harmony is a C# library made by Andreas Pardeike that is able to modify
+    existing methods at runtime.
+
+
+    The library isn''t strongly named, which means all of the mods have to use the
+    same version of it.
+
+
+    To avoid conflicts, only one copy of the library will be loaded (by this mod)
+    and all other mods would use that.
+
+
+    This mod adds a 2nd phase to the game''s mod loader, players will be able to manage
+    mods that use Harmony from that.
+
+
+    Note: Mods subscribed from the Steam Workshop that use Harmony will still show
+    up in the 1st phase, but the state there doesn''t matter.
+
+
+    Source code of Harmony: https://github.com/pardeike/Harmony
+
+    Harmony documentation: https://harmony.pardeike.net/
+
+    Source code of this mod: https://github.com/Qkrisi/ktanemod-harmony'
+  version: 1.0
+  outputFolder: build
+  previewImage: {fileID: 2800000, guid: 5e4fa7050effd4cfc9aabfe268b629fa, type: 3}
