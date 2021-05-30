@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.IO;
@@ -8,6 +9,7 @@ using HarmonyLib;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Newtonsoft.Json;
 
 namespace HarmonyModAssembly
 {
@@ -15,6 +17,7 @@ namespace HarmonyModAssembly
     {
         public static string ModInfoFile = "modInfo.json";
         public static Texture HarmonyTexture;
+        public static string SettingsPath;
 
         public static bool ToggleModInfo()
         {
@@ -30,6 +33,7 @@ namespace HarmonyModAssembly
         public static void Patch(Texture _HarmonyTexture)
         {
             HarmonyTexture = _HarmonyTexture;
+            SettingsPath = Path.Combine(Path.Combine(Application.persistentDataPath, "Modsettings"), "Harmony.json");
             new Harmony("qkrisi.harmonymod").PatchAll();
         }
     }
@@ -76,11 +80,28 @@ namespace HarmonyModAssembly
         public static bool Prefix(ModManagerManualInstructionScreen __instance, out bool __result)
         {
             bool cont = Patcher.ToggleModInfo();
+            ManualButtonPatch.AutoCloseManager = false;
             __result = false;
             if (cont)
                 return true;
             __instance.ReleaseSelection();
             SceneManager.Instance.EnterModManagerState();
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(ModManagerManualInstructionScreen), "HandleOpenManualFolder")]
+    [HarmonyPriority(Priority.First)]
+    public static class ManualButtonPatch
+    {
+        public static bool AutoCloseManager;
+        
+        public static bool Prefix(ModManagerManualInstructionScreen __instance, out bool __result)
+        {
+            bool value = ContinueButtonPatch.Prefix(__instance, out __result);
+            if(value)
+                return true;
+            AutoCloseManager = true;
             return false;
         }
     }
@@ -100,14 +121,48 @@ namespace HarmonyModAssembly
     [HarmonyPriority(Priority.First)]
     public static class ChangeButtonText
     {
+        static HarmonySettings GetSettings()
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<HarmonySettings>(File.ReadAllText(Patcher.SettingsPath));
+            }
+            catch (IOException)
+            {
+                try
+                {
+                    File.WriteAllText(Patcher.SettingsPath, JsonConvert.SerializeObject(new HarmonySettings()));
+                }
+                catch {}
+            }
+            catch {}
+            return new HarmonySettings();
+        }
+        
         public static void Postfix(MenuScreen __instance)
         {
             if (Patcher.ModInfoFile == "modInfo.json")
             {
-                if(__instance is ModManagerManualInstructionScreen screen)
+                if (__instance is ModManagerManualInstructionScreen screen)
+                {
                     screen.ContinueButton.GetComponentInChildren<TextMeshProUGUI>(true)
                         .text = "Manage Harmony mods";
+                    screen.OpenManualFolderButton.GetComponentInChildren<TextMeshProUGUI>(true).text =
+                        "Skip Harmony manager";
+                    MonoBehaviour.Destroy(screen.GetComponentInChildren<RawImage>());
+                    var texts = screen.GetComponentsInChildren<TextMeshProUGUI>(true);
+                    texts[1].text =
+                        "Click this button if you'd like to skip the Harmony mod manager and load the Harmony mods that according to the previous configuration!";
+                    texts[5].text =
+                        "Or click this button if you'd like to select which Harmony mods should be enabled or disabled!";
+                    texts[5].transform.localPosition = new Vector3(texts[5].transform.localPosition.x + 190,
+                        texts[5].transform.localPosition.y - 90, texts[5].transform.localPosition.z);
+                    if (GetSettings().AutoSkipFinalizeScreen)
+                        screen.OpenManualFolderButton.OnInteract();
+                }
             }
+            else if (ManualButtonPatch.AutoCloseManager && __instance is ModManagerManualInstructionScreen ManualScreen)
+                ManualScreen.ContinueButton.OnInteract();
             else if (__instance is ModManagerMainMenuScreen MenuScreen)
             {
                 MenuScreen.SteamWorkshopBrowserButton.gameObject.SetActive(false);
@@ -118,6 +173,8 @@ namespace HarmonyModAssembly
                     image.transform.localScale.y, image.transform.localScale.z);
                 MenuScreen.ManageModsButton.GetComponentInChildren<TextMeshProUGUI>(true).text =
                     "Manage Harmony mods";
+                if (ManualButtonPatch.AutoCloseManager)
+                    MenuScreen.ReturnToGameButton.OnInteract();
             }
             else if(__instance is ManageModsScreen ManagerScreen)
                 ManagerScreen.GetComponentInChildren<TextMeshProUGUI>().text = "Manage installed Harmony mods";
