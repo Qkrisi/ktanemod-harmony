@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 using System.Reflection.Emit;
 using System.IO;
 using System.Linq;
@@ -73,19 +74,21 @@ namespace HarmonyModAssembly
         }
     }
 
-    [HarmonyPatch(typeof(ModManagerManualInstructionScreen), "HandleContinue")]
+    [HarmonyPatch(typeof(ModManagerState), "ReturnToSetupState")]
     [HarmonyPriority(Priority.First)]
-    public static class ContinueButtonPatch
+    public static class SetupPatch
     {
-        public static bool Prefix(ModManagerManualInstructionScreen __instance, out bool __result)
+        public static bool Prefix()
         {
             bool cont = Patcher.ToggleModInfo();
             ManualButtonPatch.AutoCloseManager = false;
-            __result = false;
             if (cont)
                 return true;
-            __instance.ReleaseSelection();
-            SceneManager.Instance.EnterModManagerState();
+
+            // Make the game think this is a first load so that the UseModAlways setting can apply again.
+            typeof(ModManagerState).GetField("isFirstLoad", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, true);
+            // "Re-enter" the Mod Manager
+            SceneManager.Instance.ModManagerState.EnterTransitionComplete();
             return false;
         }
     }
@@ -96,9 +99,9 @@ namespace HarmonyModAssembly
     {
         public static bool AutoCloseManager;
         
-        public static bool Prefix(ModManagerManualInstructionScreen __instance, out bool __result)
+        public static bool Prefix()
         {
-            bool value = ContinueButtonPatch.Prefix(__instance, out __result);
+            bool value = SetupPatch.Prefix();
             if(value)
                 return true;
             AutoCloseManager = true;
@@ -112,7 +115,7 @@ namespace HarmonyModAssembly
     {
         public static bool Prefix(out bool __result)
         {
-            __result = true;
+            __result = !PlayerSettingsManager.Instance.PlayerSettings.UseModsAlways;
             return false;
         }
     }
@@ -169,7 +172,7 @@ namespace HarmonyModAssembly
                         "Or click this button if you'd like to select which Harmony mods should be enabled or disabled!";
                     texts[5].transform.localPosition = new Vector3(texts[5].transform.localPosition.x + 190,
                         texts[5].transform.localPosition.y - 90, texts[5].transform.localPosition.z);
-                    if (GetSettings().AutoSkipFinalizeScreen || (AllowAutoContinue && PlayerSettingsManager.Instance.PlayerSettings.UseModsAlways))
+                    if (GetSettings().AutoSkipFinalizeScreen)
                         screen.OpenManualFolderButton.OnInteract();
                 }
             }
