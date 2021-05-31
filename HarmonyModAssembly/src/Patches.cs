@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.IO;
 using System.Linq;
 using Assets.Scripts.Mods;
 using Assets.Scripts.Services;
+using Assets.Scripts.Settings;
 using HarmonyLib;
 using TMPro;
 using UnityEngine;
@@ -117,10 +117,22 @@ namespace HarmonyModAssembly
         }
     }
 
+    [HarmonyPatch(typeof(ModManagerHoldable), "GoToModManagerState")]
+    [HarmonyPriority(Priority.First)]
+    public static class ModManagerPatch
+    {
+        public static void Prefix()
+        {
+            ChangeButtonText.AllowAutoContinue = false;
+        }
+    }
+
     [HarmonyPatch(typeof(MenuScreen), "EnterScreenComplete")]
     [HarmonyPriority(Priority.First)]
     public static class ChangeButtonText
     {
+        public static bool AllowAutoContinue = true;
+        
         static HarmonySettings GetSettings()
         {
             try
@@ -157,7 +169,7 @@ namespace HarmonyModAssembly
                         "Or click this button if you'd like to select which Harmony mods should be enabled or disabled!";
                     texts[5].transform.localPosition = new Vector3(texts[5].transform.localPosition.x + 190,
                         texts[5].transform.localPosition.y - 90, texts[5].transform.localPosition.z);
-                    if (GetSettings().AutoSkipFinalizeScreen)
+                    if (GetSettings().AutoSkipFinalizeScreen || (AllowAutoContinue && PlayerSettingsManager.Instance.PlayerSettings.UseModsAlways))
                         screen.OpenManualFolderButton.OnInteract();
                 }
             }
