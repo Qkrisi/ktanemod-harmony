@@ -30,3 +30,6 @@ Assets/Generated
 Gen
 
 .idea
+
+HarmonyModAssembly/bin
+HarmonyModAssembly/obj
