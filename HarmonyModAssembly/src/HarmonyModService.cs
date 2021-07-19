@@ -1,5 +1,6 @@
 using UnityEngine;
 using HarmonyModAssembly;
+using HarmonyLib;
 
 public class HarmonyModService : MonoBehaviour
 {
@@ -7,6 +8,14 @@ public class HarmonyModService : MonoBehaviour
     
     public void Start()
     {
-        Patcher.Patch(HarmonyTexture);
+		if(!Harmony.HasAnyPatches("samfundev.tweaks.Harmony"))
+		{
+			Patcher.Patch(HarmonyTexture);
+			GetComponent<KMGameInfo>().OnStateChange += state =>
+			{
+				if (state == KMGameInfo.State.Setup)
+					ReloadPatch.ResetDict();
+			};
+		}
     }
 }

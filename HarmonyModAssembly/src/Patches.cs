@@ -58,7 +58,8 @@ namespace HarmonyModAssembly
     [HarmonyPriority(Priority.First)]
     public static class WorkshopPatch
     {
-        public static bool Prefix(ManageModsScreen __instance, ref List<ModInfo> ___installedMods, ref List<ModInfo> ___fullListOfMods, ref List<ModInfo> ___allSubscribedMods)
+        public static bool Prefix(ManageModsScreen __instance, ref List<ModInfo> ___installedMods,
+            ref List<ModInfo> ___fullListOfMods, ref List<ModInfo> ___allSubscribedMods)
         {
             ModManager.Instance.ReloadModMetaData();
             ___installedMods = ModManager.Instance.InstalledModInfos.Values
@@ -67,9 +68,31 @@ namespace HarmonyModAssembly
             ___fullListOfMods = Patcher.ModInfoFile == "modInfo.json"
                 ? ___installedMods.Union(___allSubscribedMods).ToList()
                 : ___installedMods;
-            ___fullListOfMods.Sort((ModInfo a, ModInfo b) => a.Title.CompareTo(b.Title));
+            ___fullListOfMods.Sort((a, b) => a.Title.CompareTo(b.Title));
             Traverse.Create(__instance).Method("ShowMods").GetValue();
             return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(ModManager), "ReloadModMetaData")]
+    [HarmonyPriority(Priority.First)]
+    public static class ReloadPatch
+    {
+        private static Dictionary<string, ModInfo> InstalledModInfos;
+
+        public static void ResetDict()
+        {
+            if (InstalledModInfos == null)
+                return;
+            ModManager.Instance.InstalledModInfos.Clear();
+            foreach(var pair in InstalledModInfos)
+                ModManager.Instance.InstalledModInfos.Add(pair.Key, pair.Value);
+        }
+        
+        public static void Prefix(ModManager __instance)
+        {
+            if (Patcher.ModInfoFile == "modInfo_Harmony.json")
+                InstalledModInfos = __instance.InstalledModInfos.ToDictionary(p => p.Key, p => p.Value);
         }
     }
 

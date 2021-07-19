@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4506868564587250}
   - component: {fileID: 114158529195253446}
   - component: {fileID: 114684177375091622}
+  - component: {fileID: 114795672429663076}
   m_Layer: 0
   m_Name: HarmonyModService
   m_TagString: Untagged
@@ -64,3 +65,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HarmonyTexture: {fileID: 2800000, guid: 5e4fa7050effd4cfc9aabfe268b629fa, type: 3}
+--- !u!114 &114795672429663076
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1847280980880518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -271661043, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
